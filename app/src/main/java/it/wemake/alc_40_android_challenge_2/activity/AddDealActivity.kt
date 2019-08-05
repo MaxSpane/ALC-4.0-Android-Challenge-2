@@ -15,6 +15,7 @@ class AddDealActivity : AppCompatActivity() {
 
     private var mFirebaseDatabase : FirebaseDatabase? = null
     private var mDatabaseReference : DatabaseReference? = null
+    private var deal: TravelDeal? = null
 
     private var mTitleET : EditText? = null
     private var mDescriptionET : EditText? = null
@@ -31,6 +32,16 @@ class AddDealActivity : AppCompatActivity() {
         mDescriptionET = findViewById(R.id.et_description)
         mPriceET = findViewById(R.id.et_price)
 
+        deal = intent.getParcelableExtra("deal")
+
+        if(deal != null){
+            mTitleET!!.setText(deal!!.title)
+            mDescriptionET!!.setText(deal!!.description)
+            mPriceET!!.setText(deal!!.price)
+        }else{
+            deal = TravelDeal()
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -44,11 +55,21 @@ class AddDealActivity : AppCompatActivity() {
 
         when(item!!.itemId){
 
-            R.id.menu_item_save ->{
+            R.id.item_save ->{
 
                 saveDeal()
                 Toast.makeText(this, "Deal saved", Toast.LENGTH_LONG).show()
                 clean()
+                finish()
+                return true
+
+            }
+
+            R.id.item_delete ->{
+
+                deleteDeal()
+                Toast.makeText(this, "Deal has been deleted", Toast.LENGTH_LONG).show()
+                finish()
                 return true
 
             }
@@ -60,12 +81,25 @@ class AddDealActivity : AppCompatActivity() {
 
     private fun saveDeal(){
 
-        val title = mTitleET!!.text.toString()
-        val description = mDescriptionET!!.text.toString()
-        val price = mPriceET!!.text.toString()
+        deal!!.title = mTitleET!!.text.toString()
+        deal!!.description = mDescriptionET!!.text.toString()
+        deal!!.price = mPriceET!!.text.toString()
 
-        val deal = TravelDeal(title, description, price,  "")
-        mDatabaseReference!!.push().setValue(deal)
+        if (deal!!.id == null){
+            mDatabaseReference!!.push().setValue(deal)
+        }else{
+            mDatabaseReference!!.child(deal!!.id!!).setValue(deal)
+        }
+
+    }
+
+    private fun deleteDeal(){
+
+        if(deal?.id == null){
+            Toast.makeText(this, "Please save the deal before deleting", Toast.LENGTH_LONG).show()
+            return
+        }
+        mDatabaseReference!!.child(deal!!.id!!).removeValue()
 
     }
 

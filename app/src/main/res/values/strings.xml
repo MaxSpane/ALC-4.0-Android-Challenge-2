@@ -5,4 +5,5 @@
     <string name="hint_deal_price">Price (numbers only)</string>
     <string name="save">Save</string>
     <string name="new_travel_deal">New Travel Deal</string>
+    <string name="delete_deal">Delete Deal</string>
 </resources>

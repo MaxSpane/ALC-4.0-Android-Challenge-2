@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         mFirebaseDatabase = FirebaseDatabase.getInstance()
         mDatabaseReference = mFirebaseDatabase!!.reference.child("traveldeals")
 
+        dealsRV = findViewById(R.id.rv_deals)
+
         dealsAdapter = DealAdapter(mDatabaseReference!!)
         dealsRV!!.adapter = dealsAdapter
         dealsRV!!.layoutManager = LinearLayoutManager(this)
