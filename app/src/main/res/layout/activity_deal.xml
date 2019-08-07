@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.AddDealActivity">
+        tools:context=".activity.DealActivity">
 
     <EditText
             android:layout_width="0dp"
@@ -34,4 +34,18 @@
             app:layout_constraintTop_toBottomOf="@+id/et_price" android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:hint="@string/hint_deal_description"/>
+    <Button
+            android:text="@string/add_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_add_image" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/et_description" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+    <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp" tools:srcCompat="@tools:sample/backgrounds/scenic"
+            android:id="@+id/iv_deal" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_image" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

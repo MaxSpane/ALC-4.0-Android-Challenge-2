@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,12 +14,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import it.wemake.alc_40_android_challenge_2.R
 import it.wemake.alc_40_android_challenge_2.adapters.DealAdapter
-import it.wemake.alc_40_android_challenge_2.model.TravelDeal
 
 class MainActivity : AppCompatActivity() {
 
     private var mFirebaseDatabase : FirebaseDatabase? = null
-    private var mDatabaseReference : DatabaseReference? = null
+    private var mTravelDealsDatabaseReference : DatabaseReference? = null
     private var firebaseAuth :FirebaseAuth? = null
     private var authListener: FirebaseAuth.AuthStateListener? = null
 
@@ -70,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
             R.id.item_new_travel_deal -> {
 
-                val intent = Intent(this, AddDealActivity::class.java)
+                val intent = Intent(this, DealActivity::class.java)
                 startActivity(intent)
 
                 return true
@@ -105,29 +103,30 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         mFirebaseDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mFirebaseDatabase!!.reference.child("traveldeals")
+        mTravelDealsDatabaseReference = mFirebaseDatabase!!.reference.child("traveldeals")
         firebaseAuth = FirebaseAuth.getInstance()
         authListener = FirebaseAuth.AuthStateListener {
             if(it.currentUser == null){
                 signIn()
             }else{
                 showMenu()
-                checkAdmin()
+                checkAdmin(it.uid!!)
             }
             Toast.makeText(this, "Welcome back!", Toast.LENGTH_LONG).show()
         }
 
         dealsRV = findViewById(R.id.rv_deals)
 
-        dealsAdapter = DealAdapter(mDatabaseReference!!)
+        dealsAdapter = DealAdapter(mTravelDealsDatabaseReference!!)
         dealsRV!!.adapter = dealsAdapter
         dealsRV!!.layoutManager = LinearLayoutManager(this)
 
         firebaseAuth?.addAuthStateListener(authListener!!)
     }
 
-    private fun checkAdmin(){
-        mDatabaseReference!!.addChildEventListener(object: ChildEventListener{
+    private fun checkAdmin(uid: String){
+        val ref =  mFirebaseDatabase!!.reference.child("administrators").child(uid)
+        ref.addChildEventListener(object: ChildEventListener{
             override fun onCancelled(p0: DatabaseError) {
 
             }

@@ -10,6 +10,7 @@ class TravelDeal() : Parcelable {
     var price : String? = null
     var imageUri : String? = null
     var id : String? = null
+    var imageName : String? = null
 
     constructor(parcel: Parcel) : this() {
         title = parcel.readString()
@@ -17,6 +18,7 @@ class TravelDeal() : Parcelable {
         price = parcel.readString()
         imageUri = parcel.readString()
         id = parcel.readString()
+        imageName = parcel.readString()
     }
 
     constructor(title : String, description : String, price : String, imageUri : String) : this(){
@@ -34,6 +36,7 @@ class TravelDeal() : Parcelable {
         parcel.writeString(price)
         parcel.writeString(imageUri)
         parcel.writeString(id)
+        parcel.writeString(imageName)
     }
 
     override fun describeContents(): Int {

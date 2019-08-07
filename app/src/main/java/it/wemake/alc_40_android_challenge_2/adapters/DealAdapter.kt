@@ -4,14 +4,16 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.squareup.picasso.Picasso
 import it.wemake.alc_40_android_challenge_2.R
-import it.wemake.alc_40_android_challenge_2.activity.AddDealActivity
+import it.wemake.alc_40_android_challenge_2.activity.DealActivity
 import it.wemake.alc_40_android_challenge_2.model.TravelDeal
 
 class DealAdapter(
@@ -72,12 +74,14 @@ class DealAdapter(
         var titleTV : TextView? = null
         var descriptionTV : TextView? = null
         var priceTV : TextView? = null
+        var dealIV : ImageView? = null
         var deal : TravelDeal? = null
 
         init {
             titleTV = itemView.findViewById(R.id.tv_title)
             descriptionTV = itemView.findViewById(R.id.tv_description)
             priceTV = itemView.findViewById(R.id.tv_price)
+            dealIV = itemView.findViewById(R.id.iv_deal)
 
             itemView.setOnClickListener(this)
         }
@@ -87,16 +91,30 @@ class DealAdapter(
             titleTV!!.text = deal.title
             descriptionTV!!.text = deal.description
             priceTV!!.text = deal.price
+
+            showImage(deal.imageUri)
+
         }
 
         override fun onClick(v: View?) {
             val position = adapterPosition
 
-            val intent = Intent(v!!.context, AddDealActivity::class.java)
+            val intent = Intent(v!!.context, DealActivity::class.java)
             intent.putExtra("deal", deal)
             itemView.context.startActivity(intent)
 
         }
+
+        fun showImage(url: String?){
+            if(url != null && !url.isEmpty()){
+                Picasso.get()
+                    .load(url)
+                    .resize(80, 80)
+                    .centerCrop()
+                    .into(dealIV)
+            }
+        }
+
     }
 
 }
