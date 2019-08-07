@@ -16,6 +16,7 @@ class AddDealActivity : AppCompatActivity() {
     private var mFirebaseDatabase : FirebaseDatabase? = null
     private var mDatabaseReference : DatabaseReference? = null
     private var deal: TravelDeal? = null
+    private var isAdmin = false
 
     private var mTitleET : EditText? = null
     private var mDescriptionET : EditText? = null
@@ -28,9 +29,15 @@ class AddDealActivity : AppCompatActivity() {
         mFirebaseDatabase = FirebaseDatabase.getInstance()
         mDatabaseReference = mFirebaseDatabase!!.reference.child("traveldeals")
 
+        isAdmin = this.getSharedPreferences("travelmantics",0).getBoolean("isAdmin", false)
+
         mTitleET = findViewById(R.id.et_title)
         mDescriptionET = findViewById(R.id.et_description)
         mPriceET = findViewById(R.id.et_price)
+
+        mTitleET!!.isEnabled = isAdmin
+        mDescriptionET!!.isEnabled = isAdmin
+        mPriceET!!.isEnabled = isAdmin
 
         deal = intent.getParcelableExtra("deal")
 
@@ -44,9 +51,15 @@ class AddDealActivity : AppCompatActivity() {
 
     }
 
+
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.menu_create_deal, menu)
+
+        menu!!.findItem(R.id.item_delete).isVisible = isAdmin
+        menu.findItem(R.id.item_save).isVisible = isAdmin
+
         return true
 
     }
